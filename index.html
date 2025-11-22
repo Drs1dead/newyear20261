@@ -19,7 +19,7 @@
     .page.active{opacity:1;z-index:10}
     .card{background:rgba(10,0,40,.9);backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,.1);border-radius:20px;max-width:420px}
     .btn-gold{background:linear-gradient(45deg,#ffd700,#ffb347);border:none;color:#000;font-weight:bold}
-    .btn-google{background:#fff;color:#444;border:1px solid #ccc}
+    .btn-google{background:#fff;color:#444;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;gap:10px}
     .magic-title{font-size:5rem;background:linear-gradient(45deg,#ffd700,#fff,#87CEEB);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px gold;animation:g 3s infinite}
     @keyframes g{0%{text-shadow:0 0 40px gold}100%{text-shadow:0 0 80px #fff}}
     .tree{width:220px;height:320px;background:conic-gradient(from 0deg at 50% 10%,#0f0 0deg,#0c0 30deg,#090 60deg,transparent 90deg);border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;position:relative;animation:tr 4s infinite;margin:40px auto}
@@ -36,14 +36,14 @@
       <h1 style="color:#ffd700;font-size:3rem">Скоро Новый год!</h1>
       <p class="mb-4">Выбери способ входа</p>
 
-      <button id="googleBtn" class="btn btn-google btn-lg w-100 mb-3">
+      <button id="googleBtn" class="btn btn-google btn-lg w-100 mb-4">
         Войти через Google
       </button>
 
-      <div class="text-center mb-3 text-muted">или</div>
+      <div class="text-center mb-3 text-muted">или по email</div>
 
       <input type="email" id="email" class="form-control form-control-lg mb-3" placeholder="Email">
-      <input type="password" id="pass" class="form-control form-control-lg mb-3" placeholder="Пароль (6+ символов)">
+      <input type="password" id="pass" class="form-control form-control-lg mb-3" placeholder="Пароль">
 
       <div class="d-grid gap-2">
         <button id="login" class="btn btn-outline-light btn-lg">Войти</button>
@@ -64,86 +64,85 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script>
-    // Надёжный воркер (мой, живёт вечно)
-    fetch('https://firebase-config.denoise.workers.dev/')
-      .then(r => r.json())
-      .then(config => {
-        firebase.initializeApp(config);
-        const auth = firebase.auth();
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDW7tqHvORYUSO5r4lxhzg8hO-cbwnr-A",
+      authDomain: "newearsitette2025.firebaseapp.com",
+      projectId: "newearsitette2025",
+      storageBucket: "newearsitette2025.firebasestorage.app",
+      messagingSenderId: "857563274920",
+      appId: "1:857563274920:web:712fee6831652edbe12c9d"
+    };
 
-        // Автовход 5 минут
-        auth.onAuthStateChanged(user => {
-          if (user && localStorage.getItem('lastLogin') && Date.now() - localStorage.getItem('lastLogin') < 300000) {
-            openMagic();
-          }
-        });
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-        // Google вход
-        document.getElementById('googleBtn').onclick = () => {
-          const provider = new firebase.auth.GoogleAuthProvider();
-          auth.signInWithPopup(provider)
-            .then(() => {
-              localStorage.setItem('lastLogin', Date.now());
-              openMagic();
-            })
-            .catch(err => alert("Ошибка Google: " + err.message));
-        };
+    // Автовход 5 минут
+    auth.onAuthStateChanged(user => {
+      if (user && localStorage.getItem('lastLogin') && Date.now() - localStorage.getItem('lastLogin') < 300000) {
+        openMagic();
+      }
+    });
 
-        // Email + пароль
-        document.getElementById('login').onclick = () => {
-          const email = document.getElementById('email').value.trim();
-          const pass = document.getElementById('pass').value;
-          if (!email || !pass) return showMsg('Заполните email и пароль');
+    // Google
+    document.getElementById('googleBtn').onclick = () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); })
+        .catch(err => showMsg('Ошибка Google: ' + err.message));
+    };
 
-          auth.signInWithEmailAndPassword(email, pass)
-            .then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); })
-            .catch(err => showMsg(getErrorText(err.code)));
-        };
+    // Вход
+    document.getElementById('login').onclick = () => {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      if (!email || !pass) return showMsg('Введи email и пароль');
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); })
+        .catch(err => showMsg(getError(err.code)));
+    };
 
-        document.getElementById('register').onclick = () => {
-          const email = document.getElementById('email').value.trim();
-          const pass = document.getElementById('pass').value;
-          if (!email || !pass) return showMsg('Заполните email и пароль');
-          if (pass.length < 6) return showMsg('Пароль должен быть минимум 6 символов');
+    // Регистрация
+    document.getElementById('register').onclick = () => {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      if (!email || !pass) return showMsg('Введи email и пароль');
+      if (pass.length < 6) return showMsg('Пароль минимум 6 символов');
+      auth.createUserWithEmailAndPassword(email, pass)
+        .then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); })
+        .catch(err => showMsg(getError(err.code)));
+    };
 
-          auth.createUserWithEmailAndPassword(email, pass)
-            .then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); })
-            .catch(err => showMsg(getErrorText(err.code)));
-        };
+    function getError(code) {
+      const e = {
+        'auth/user-not-found': 'Такого пользователя нет',
+        'auth/wrong-password': 'Неправильный пароль',
+        'auth/email-already-in-use': 'Email уже занят',
+        'auth/invalid-email': 'Неправильный email',
+        'auth/weak-password': 'Пароль слишком короткий',
+        'auth/too-many-requests': 'Слишком много попыток, подожди минуту'
+      };
+      return e[code] || 'Ошибка, попробуй ещё раз';
+    }
 
-        function showMsg(text) {
-          document.getElementById('msg').textContent = text;
+    function showMsg(text) {
+      document.getElementById('msg').textContent = text;
+    }
+
+    function openMagic() {
+      document.getElementById('auth').classList.remove('active');
+      document.getElementById('magic').classList.add('active');
+      setTimeout(() => {
+        for(let i=0;i<200;i++){
+          const s=document.createElement('div');
+          s.textContent='❆❅✻*❄'[Math.floor(Math.random()*5)];
+          s.style.left=Math.random()*100+'vw';
+          s.style.animationDuration=6+Math.random()*14+'s';
+          s.style.fontSize=(0.8+Math.random()*1.2)+'em';
+          s.style.opacity=0.6+Math.random()*0.4;
+          document.querySelector('.snow').appendChild(s);
         }
-
-        function getErrorText(code) {
-          const errors = {
-            'auth/user-not-found': 'Такого пользователя нет',
-            'auth/wrong-password': 'Неправильный пароль',
-            'auth/email-already-in-use': 'Этот email уже занят',
-            'auth/invalid-email': 'Неверный email',
-            'auth/weak-password': 'Пароль слишком слабый',
-            'auth/too-many-requests': 'Слишком много попыток. Подожди минуту'
-          };
-          return errors[code] || 'Ошибка. Попробуй ещё раз';
-        }
-
-        function openMagic() {
-          document.getElementById('auth').classList.remove('active');
-          document.getElementById('magic').classList.add('active');
-          setTimeout(() => {
-            for(let i=0;i<200;i++){
-              const s=document.createElement('div');
-              s.textContent='❆❅✻*❄'[Math.floor(Math.random()*5)];
-              s.style.left=Math.random()*100+'vw';
-              s.style.animationDuration=6+Math.random()*14+'s';
-              s.style.fontSize=(0.8+Math.random()*1.2)+'em';
-              s.style.opacity=0.6+Math.random()*0.4;
-              document.querySelector('.snow').appendChild(s);
-            }
-          }, 300);
-        }
-      })
-      .catch(() => alert('Нет интернета или сервер временно недоступен'));
+      }, 300);
+    }
   </script>
 </body>
 </html>
