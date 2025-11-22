@@ -1,152 +1,82 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ждите чего-то грандиозного...</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#0a001f;color:#fff;height:100vh;overflow:hidden;font-family:'Segoe UI',sans-serif}
-    .stars{position:fixed;inset:0;background:url('https://assets.codepen.io/1538474/stars.png');animation:t 8s infinite}
-    @keyframes t{0%,100%{opacity:.7}50%{opacity:1}}
-    .aurora{position:fixed;top:0;width:100%;height:40%;background:linear-gradient(90deg,#ff0080,#ff8c00,#ffd700,#00ff80);opacity:.25;filter:blur(100px);animation:a 20s infinite alternate}
-    @keyframes a{0%{transform:translateX(-30%)}100%{transform:translateX(30%)}}
-    
-    /* Много красивых снежинок */
-    .snow{position:fixed;inset:0;pointer-events:none;z-index:5}
-    .snowflake{position:absolute;color:#fff;font-size:1.8em;animation:snow linear infinite;user-select:none}
-    @keyframes snow{to{transform:translateY(100vh) rotate(720deg)}}
+<html lang="ru"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Доступ закрыт</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a001f;color:#fff;height:100vh;overflow:hidden;font-family:system-ui}
+.stars{position:fixed;inset:0;background:url('https://assets.codepen.io/1538474/stars.png');animation:t 8s infinite}
+@keyframes t{0%,100%{opacity:.7}50%{opacity:1}}
+.aurora{position:fixed;top:0;width:100%;height:40%;background:linear-gradient(90deg,#ff0080,#ff8c00,#ffd700,#00ff80);opacity:.25;filter:blur(100px);animation:a 20s infinite alternate}
+@keyframes a{0%{transform:translateX(-30%)}100%{transform:translateX(30%)}}
+.snow{position:fixed;inset:0;pointer-events:none;z-index:5}
+.snowflake{position:absolute;color:#fff;font-size:1.8em;animation:snow linear infinite}
+@keyframes snow{to{transform:translateY(100vh) rotate(720deg)}}
+.page{position:fixed;inset:0;transition:opacity 1.5s;opacity:0;z-index:-1}
+.page.active{opacity:1;z-index:10}
+.card{background:rgba(10,0,40,.9);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;max-width:420px}
+.btn-gold{background:linear-gradient(45deg,#ffd700,#ffb347);border:none;color:#000;font-weight:bold}
+.grand-title{font-size:8.5rem;font-weight:900;line-height:1.1;background:linear-gradient(45deg,#ff0080,#ff8c00,#ffd700,#00ff80,#0080ff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 100px gold;animation:p 3s infinite,r 12s linear infinite;letter-spacing:10px}
+@keyframes p{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes r{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
+</style>
+</head><body>
 
-    .page{position:fixed;inset:0;transition:opacity 1.5s;opacity:0;z-index:-1}
-    .page.active{opacity:1;z-index:10}
-    .card{background:rgba(10,0,40,.9);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;max-width:420px}
-    .btn-gold{background:linear-gradient(45deg,#ffd700,#ffb347);border:none;color:#000;font-weight:bold}
-    .btn-google{background:#fff;color:#444;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;gap:10px}
+<div id="a" class="page active d-flex align-items-center justify-content-center">
+  <div class="stars"></div>
+  <div class="card shadow-lg p-5 text-center">
+    <h1 style="color:#ffd700;font-size:3rem">Tlit Access</h1>
+    <button id="g" class="btn btn-google btn-lg w-100 mb-3">Google</button>
+    <div class="text-center mb-3 text-muted">или</div>
+    <input type="email" id="e" class="form-control form-control-lg mb-3" placeholder="Email">
+    <input type="password" id="p" class="form-control form-control-lg mb-3" placeholder="Пароль">
+    <div class="d-grid gap-2">
+      <button id="l" class="btn btn-outline-light btn-lg">Войти</button>
+      <button id="r" class="btn btn-gold btn-lg">Регистрация</button>
+    </div>
+    <div id="m" class="mt-3 text-danger fw-bold"></div>
+  </div>
+</div>
 
-    /* Грандиозная надпись */
-    .grand-title{
-      font-size:8.5rem;font-weight:900;line-height:1.1;
-      background:linear-gradient(45deg,#ff0080,#ff8c00,#ffd700,#00ff80,#0080ff);
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      text-shadow:0 0 100px rgba(255,215,0,0.8);
-      animation:pulse 3s infinite, rainbow 12s linear infinite;
-      letter-spacing:10px;
-    }
-    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-    @keyframes rainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
-  </style>
-</head>
-<body>
-
-  <!-- Экран входа -->
-  <div id="auth" class="page active d-flex align-items-center justify-content-center">
-    <div class="stars"></div>
-    <div class="card shadow-lg p-5 text-center">
-      <h1 style="color:#ffd700;font-size:3rem">Вход</h1>
-      <p class="mb-4 text-light">Выбери способ</p>
-
-      <button id="googleBtn" class="btn btn-google btn-lg w-100 mb-3">
-        Войти через Google
-      </button>
-
-      <div class="text-center mb-3 text-muted">или</div>
-
-      <input type="email" id="email" class="form-control form-control-lg mb-3" placeholder="Email">
-      <input type="password" id="pass" class="form-control form-control-lg mb-3" placeholder="Пароль">
-
-      <div class="d-grid gap-2">
-        <button id="login" class="btn btn-outline-light btn-lg">Войти</button>
-        <button id="register" class="btn btn-gold btn-lg">Зарегистрироваться</button>
+<div class="modal fade" id="t" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-light border-warning" style="border-width:3px">
+      <div class="modal-header border-0"><h5 class="modal-title">Код от Tlit</h5></div>
+      <div class="modal-body text-center py-4">
+        <input type="text" id="c" class="form-control form-control-lg text-center" placeholder="••••••••" maxlength="8" style="letter-spacing:8px;font-size:2rem">
       </div>
-      <div id="msg" class="mt-3 text-danger fw-bold"></div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button id="s" class="btn btn-gold btn-lg px-5">Открыть</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- Главный экран после входа -->
-  <div id="magic" class="page text-center d-flex flex-column justify-content-center align-items-center position-relative">
-    <div class="snow"></div>
-    <div class="aurora"></div>
-    
-    <h1 class="grand-title">ЖДИТЕ ЧТО-ТО<br>ГРАНДИОЗНОЕ</h1>
-
-    <!-- Подпись под углом -->
-    <div style="position:absolute;bottom:30px;right:50px;transform:rotate(-15deg);font-size:2rem;color:#ffd700;text-shadow:0 0 30px gold;letter-spacing:3px;opacity:0.9">
-      Design by Tlit ✦
-    </div>
-
-    <div class="tree" style="width:220px;height:320px;background:conic-gradient(from 0deg at 50% 10%,#0f0 0deg,#0c0 30deg,#090 60deg,transparent 90deg);border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;position:relative;animation:tr 4s infinite;margin-top:40px">
-      <div style="content:'★';position:absolute;top:-35px;left:50%;transform:translateX(-50%);font-size:70px;color:gold;animation:st 3s infinite">★</div>
-    </div>
+<div id="m2" class="page text-center d-flex flex-column justify-content-center align-items-center position-relative">
+  <div class="snow"></div>
+  <div class="aurora"></div>
+  <h1 class="grand-title">ЖДИТЕ ЧТО-ТО<br>ГРАНДИОЗНОЕ</h1>
+  <div style="position:absolute;bottom:30px;right:50px;transform:rotate(-15deg);font-size:2rem;color:#ffd700;text-shadow:0 0 30px gold;letter-spacing:3px;opacity:.9">
+    Design by Tlit
   </div>
+</div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCDW7tqHvORYUSO5r4lxhzg8hO-cbwnr-A",
-      authDomain: "newearsitette2025.firebaseapp.com",
-      projectId: "newearsitette2025",
-      storageBucket: "newearsitette2025.firebasestorage.app",
-      messagingSenderId: "857563274920",
-      appId: "1:857563274920:web:712fee6831652edbe12c9d"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // Автовход 5 минут
-    auth.onAuthStateChanged(user => {
-      if (user && localStorage.getItem('lastLogin') && Date.now() - localStorage.getItem('lastLogin') < 300000) {
-        openMagic();
-      }
-    });
-
-    // Google вход
-    document.getElementById('googleBtn').onclick = () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); });
-    };
-
-    // Email/пароль
-    document.getElementById('login').onclick = () => {
-      const e = document.getElementById('email').value.trim();
-      const p = document.getElementById('pass').value;
-      if (!e || !p) return showMsg('Заполните поля');
-      auth.signInWithEmailAndPassword(e, p).then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); })
-        .catch(err => showMsg('Неверный логин или пароль'));
-    };
-
-    document.getElementById('register').onclick = () => {
-      const e = document.getElementById('email').value.trim();
-      const p = document.getElementById('pass').value;
-      if (!e || !p) return showMsg('Заполните поля');
-      if (p.length < 6) return showMsg('Пароль минимум 6 символов');
-      auth.createUserWithEmailAndPassword(e, p).then(() => { localStorage.setItem('lastLogin', Date.now()); openMagic(); })
-        .catch(err => showMsg('Email уже занят или ошибка'));
-    };
-
-    function showMsg(t) { document.getElementById('msg').textContent = t; }
-
-    function openMagic() {
-      document.getElementById('auth').classList.remove('active');
-      document.getElementById('magic').classList.add('active');
-
-      // Запускаем кучу красивых снежинок
-      const snowContainer = document.querySelector('.snow');
-      const symbols = '❅❆✻❄✦✧❉❋❊';
-      for(let i = 0; i < 250; i++) {
-        const s = document.createElement('div');
-        s.className = 'snowflake';
-        s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        s.style.left = Math.random() * 100 + 'vw';
-        s.style.animationDuration = 8 + Math.random() * 12 + 's';
-        s.style.opacity = 0.4 + Math.random() * 0.6;
-        s.style.fontSize = 0.8 + Math.random() * 1.5 + 'em';
-        snowContainer.appendChild(s);
-      }
-    }
-  </script>
-</body>
-</html>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script>
+const _=['VGxpdDIwMjY=','YXBpS2V5','YXV0aERvbWFpbg==','cHJvamVjdElk','c3RvcmFnZUJ1Y2tldA==','bWVzc2FnaW5nU2VuZGVySWQ=','YXBwSWQ=','QUl6YVN5Q0RXN3RxSHZPUllVU081cjRseGh6ZzhILWNiN25yLUE=','bmV3ZWFyc2l0ZXR0ZTIwMjUuZmlyZWJhc2VhcHAuY29t','bmV3ZWFyc2l0ZXR0ZTIwMjU=','bmV3ZWFyc2l0ZXR0ZTIwMjUuZmlyZWJhc2VzdG9yYWdlLmFwcA==','ODU3NTYzMjc0OTIw','MTs4NTc1NjMyNzQ5MjA6d2ViOjcxMmZlZTY4MzE2NTJlZGJlMTJjOWQ='];
+const d=s=>atob(s);
+const c={[d(_[1])]:d(_[7]),[d(_[2])]:d(_[8]),[d(_[3])]:d(_[9]),[d(_[4])]:d(_[10]),[d(_[5])]:d(_[11]),[d(_[6])]:d(_[12])};
+firebase.initializeApp(c);const a=firebase.auth();const m=new bootstrap.Modal('#t');
+const go=()=>{localStorage.setItem('lastLogin',Date.now());setTimeout(()=>m.show(),500)};
+a.onAuthStateChanged(u=>{if(u&&localStorage.getItem('lastLogin')&&Date.now()-localStorage.getItem('lastLogin')<300000){localStorage.getItem('ok')==='yes'?open():go()}});
+document.getElementById('g').onclick=_=>{const p=new firebase.auth.GoogleAuthProvider();a.signInWithPopup(p).then(go)};
+document.getElementById('l').onclick=_=>{const e=document.getElementById('e').value.trim(),p=document.getElementById('p').value;if(!e||!p)return msg('Поля');a.signInWithEmailAndPassword(e,p).then(go).catch(_=>msg('Ошибка'))};
+document.getElementById('r').onclick=_=>{const e=document.getElementById('e').value.trim(),p=document.getElementById('p').value;if(!e||!p)return msg('Поля');if(p.length<6)return msg('Короткий');a.createUserWithEmailAndPassword(e,p).then(go).catch(_=>msg('Занят'))};
+document.getElementById('s').onclick=_=>{if(document.getElementById('c').value.trim()===d(_[0])){localStorage.setItem('ok','yes');m.hide();open()}else{document.getElementById('c').value='';alert('Нет')}};
+function msg(t){document.getElementById('m').textContent=t}
+function open(){document.getElementById('a').classList.remove('active');document.getElementById('m2').classList.add('active');const s=document.querySelector('.snow');const sym='Flake';for(let i=0;i<300;i++){const f=document.createElement('div');f.className='snowflake';f.textContent=sym;f.style.left=Math.random()*100+'vw';f.style.animationDuration=8+Math.random()*15+'s';f.style.opacity=0.3+Math.random()*0.7;f.style.fontSize=0.7+Math.random()*1.6+'em';s.appendChild(f)}}
+</script>
+</body></html>
